@@ -28,10 +28,10 @@ public class TwinderClient_Part2 {
         double minResponse = ds.getMin();
         double maxResponse = ds.getMax();
 
-        System.out.println("Mean Response Time: " + mean + " ms");
-        System.out.println("Median Response Time: " + median + " ms");
-        System.out.println("p99 Response Time: " + p99 + " ms");
-        System.out.println("MIN Response Time: " + minResponse + " ms");
-        System.out.println("MAX Response Time: " + maxResponse + " ms");
+        System.out.println("POST method Mean Response Time: " + mean + " ms");
+        System.out.println("POST method Median Response Time: " + median + " ms");
+        System.out.println("POST method p99 Response Time: " + p99 + " ms");
+        System.out.println("POST method MIN Response Time: " + minResponse + " ms");
+        System.out.println("POST method MAX Response Time: " + maxResponse + " ms");
     }
 }

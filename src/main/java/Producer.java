@@ -9,7 +9,7 @@ import java.time.Duration;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
-public class Producer implements Runnable {
+public class Producer implements Runnable, Configuration {
     private final BlockingQueue<HttpResponse<String>> sharedQueue;
     private int threadNo;
     private int numberOfRequests;
@@ -52,8 +52,8 @@ public class Producer implements Runnable {
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
         Gson gson = new Gson();
-        String ec2Host = "ec2-18-206-207-70.compute-1.amazonaws.com";
-        String serviceUrl = "http://" + ec2Host + ":8080/Twinder-project_war/swipe/";
+//        String ec2Host = "TwinderServlet-LB-793864862.us-west-2.elb.amazonaws.com";
+////        String serviceUrl = "http://" + ec2Host + ":8080/Twinder-project_war/swipe/";
 //        String serviceUrl = "http://localhost:8080/Twinder_project_war_exploded/swipe/";
         for (int i = 0; i < numberOfRequests; i++) {
             RequestBody requestBody = new RequestBody();
@@ -62,15 +62,17 @@ public class Producer implements Runnable {
             int swipee = randomNumber(SWIPEE_MAX);
             String comment = randomComment();
 
-            requestBody.setSwipe(swipeDirection);
+//            requestBody.setSwipe(swipeDirection);
             requestBody.setSwiper(swiper);
             requestBody.setSwipee(swipee);
             requestBody.setComment(comment);
             requestBody.setStartTime(System.currentTimeMillis());
 
+//            System.out.println(requestBody.getStartTime());
+
             // Execute the POST
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(serviceUrl + swipeDirection))
+                    .uri(URI.create(EC2_PATH + "swipe/" + swipeDirection))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(requestBody)))
                     .build();
@@ -79,7 +81,7 @@ public class Producer implements Runnable {
             try {
                 response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                 sharedQueue.put(response);
-                System.out.println("Producer " + this.threadNo + ": " + response.body());
+//                System.out.println("Producer " + this.threadNo + ": " + response.body());
 
             } catch (IOException e) {
                 e.printStackTrace();
